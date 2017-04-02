@@ -420,8 +420,13 @@ export default function webpackConfigFactory(buildOptions) {
             {
               path: 'css-loader',
               // Include sourcemaps for dev experience++.
-              query: { sourceMap: true },
+              query: {
+                importLoaders: 1,
+                modules: true,
+                sourceMap: true,
+              },
             },
+            'postcss-loader',
           ],
         }),
       ),
@@ -472,13 +477,13 @@ export default function webpackConfigFactory(buildOptions) {
             ifOptimizeClient(() => ({
               loader: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                use: ['css-loader'],
+                use: ['css-loader', 'postcss-loader'],
               }),
             })),
             // When targetting the server we use the "/locals" version of the
             // css loader, as we don't need any css files for the server.
             ifNode({
-              loaders: ['css-loader/locals'],
+              loaders: ['css-loader/locals', 'postcss-loader'],
             }),
           ),
         ),
